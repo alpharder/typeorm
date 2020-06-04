@@ -23,7 +23,7 @@ import {TableCheck} from "./table/TableCheck";
 import {TableExclusion} from "./table/TableExclusion";
 import {View} from "./view/View";
 import {AuroraDataApiDriver} from "../driver/aurora-data-api/AuroraDataApiDriver";
-import { ForeignKeyMetadata } from "../metadata/ForeignKeyMetadata";
+import {ForeignKeyMetadata} from "../metadata/ForeignKeyMetadata";
 
 /**
  * Creates complete tables schemas in the database based on the entity metadatas.
@@ -647,9 +647,13 @@ export class RdbmsSchemaBuilder implements SchemaBuilder {
             if (!table)
                 return;
 
-            const newKeys = metadata.foreignKeys.filter(foreignKey => {
-                return !table.foreignKeys.find(dbForeignKey => foreignKeysMatch(dbForeignKey, foreignKey));
-            });
+            const newKeys = metadata.foreignKeys
+                .filter(foreignKey => {
+                    return foreignKey.createInDb;
+                })
+                .filter(foreignKey => {
+                    return !table.foreignKeys.find(dbForeignKey => foreignKeysMatch(dbForeignKey, foreignKey));
+                });
             if (newKeys.length === 0)
                 return;
 

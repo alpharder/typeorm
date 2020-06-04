@@ -155,6 +155,11 @@ export class RelationMetadata {
     deferrable?: DeferrableType;
 
     /**
+     * What to do with a relation on update of the row containing a foreign key.
+     */
+    createForeignKeys: boolean = true;
+
+    /**
      * Gets the property's type to which this relation is applied.
      *
      * For example for @ManyToMany(type => Category) in Post, target will be Category.
@@ -296,6 +301,7 @@ export class RelationMetadata {
         this.onDelete = args.options.onDelete;
         this.onUpdate = args.options.onUpdate;
         this.deferrable = args.options.deferrable;
+        this.createForeignKeys = args.options.createForeignKeys === false ? false : true;
         this.isEager = args.options.eager || false;
         this.persistenceEnabled = args.options.persistence === false ? false : true;
         this.isTreeParent = args.isTreeParent || false;
